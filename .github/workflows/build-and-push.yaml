@@ -1,0 +1,24 @@
+name: Build and Push Docker Image
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker Image
+        run: |
+          docker build -t weatherappacr5.azurecr.io ./cst8918-w24-a03-weather-pulumi
+          docker tag weatherappacr5.azurecr.io:latest cst8918w24a03weatherpulumi:latest
+          echo ${{ github.sha }} > SHA.txt
+
+      - name: Push Docker Image
+        run: |
+          echo ${{ github.sha }} > SHA.txt
+          docker push cst8918w24a03weatherpulumi:latest

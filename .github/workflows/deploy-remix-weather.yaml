@@ -1,0 +1,28 @@
+name: Deploy Remix Weather Application
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-remix-weather:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Login to Azure Container Registry
+        run: az acr login --name weatherappacr5
+
+      - name: Tag Docker Image
+        run: docker tag cst8918w24a03weatherpulumi weatherappacr5.azurecr.io/cst8918w24a03weatherpulumi:latest
+
+      - name: Verify ACR DNS Resolution
+        run: nslookup weatherappacr5.azurecr.io
+
+      - name: Push Docker Image to ACR
+        run: docker push weatherappacr5.azurecr.io/cst8918w24a03weatherpulumi:latest
+
+      - name: Get Service Details
+        run: kubectl get service weather-app-service
