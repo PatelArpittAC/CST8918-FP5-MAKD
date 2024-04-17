@@ -18,12 +18,15 @@ jobs:
           node-version: '14'
 
       - name: Install dependencies
+        working-directory: ./cst8918-w24-a03-weather-pulumi
         run: npm install
 
       - name: Run ESLint
+        working-directory: ./cst8918-w24-a03-weather-pulumi
         run: npm run lint
 
       - name: Run Prettier
+        working-directory: ./cst8918-w24-a03-weather-pulumi
         run: npm run format
 
       - name: Check for modified files

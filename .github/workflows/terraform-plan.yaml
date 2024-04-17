@@ -15,19 +15,40 @@ jobs:
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: 3.99.0
+          terraform_version: 1.7.5
 
-      - name: Terraform Init
-        run: terraform init
+      - name: Terraform Init - Network Module
+        run: terraform init -chdir=network_module
 
-      - name: Terraform Validate
-        run: terraform validate
+      - name: Terraform Validate - Network Module
+        run: terraform validate -chdir=network_module
 
-      - name: Terraform Plan
-        run: terraform plan -out=tfplan
+      - name: Terraform Plan - Network Module
+        run: terraform plan -out=network.tfplan -chdir=network_module
 
-      - name: Upload Terraform Plan
+      - name: Terraform Init - AKS Module
+        run: terraform init -chdir=aks_module
+
+      - name: Terraform Validate - AKS Module
+        run: terraform validate -chdir=aks_module
+
+      - name: Terraform Plan - AKS Module
+        run: terraform plan -out=aks.tfplan -chdir=aks_module
+
+      - name: Terraform Init - Weather App Module
+        run: terraform init -chdir=weatherapp_module
+
+      - name: Terraform Validate - Weather App Module
+        run: terraform validate -chdir=weatherapp_module
+
+      - name: Terraform Plan - Weather App Module
+        run: terraform plan -out=weatherapp.tfplan -chdir=weatherapp_module
+
+      - name: Upload Terraform Plans
         uses: actions/upload-artifact@v2
         with:
-          name: tfplan
-          path: tfplan
+          name: terraform-plans
+          path: |
+            network.tfplan
+            aks.tfplan
+            weatherapp.tfplan
